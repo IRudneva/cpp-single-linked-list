@@ -138,7 +138,7 @@ public:
     }
 
     void PopFront() noexcept {
-        assert(head_.next_node != nullptr);
+        assert(!this->IsEmpty());
 
         Node* next_node = head_.next_node->next_node;
         delete head_.next_node;
@@ -212,13 +212,11 @@ private:
     void Assign(InputIterator from, InputIterator to) {
 
         SingleLinkedList<Type> tmp;
+        auto it_begin = tmp.cbefore_begin();
 
-        Node** node_ptr = &tmp.head_.next_node;
         while (from != to) {
-            assert(*node_ptr == nullptr);
-            *node_ptr = new Node(*from, nullptr);
-            ++tmp.size_;
-            node_ptr = &((*node_ptr)->next_node);
+            auto it_next = tmp.InsertAfter(it_begin, *from);
+            it_begin = it_next;
             ++from;
         }
         swap(tmp);
